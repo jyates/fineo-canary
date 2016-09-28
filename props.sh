@@ -14,3 +14,7 @@ export client_tools_jar=$WORKSPACE/client/`ls tools*.jar| grep -v tests | grep -
 export client_jdbc_jar=$WORKSPACE/client/`ls tools*jdbc.jar`
 export queries=$WORKSPACE/queries
 export JOB_OUTPUT/$WORKSPACE/job
+
+# urls
+export stream_url=https://hvobvxe805.execute-api.us-east-1.amazonaws.com
+export read_url=https://` something something `.execute-api.us-east-1.amazonaws.com
