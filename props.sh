@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# disable debugging
+set +x
 # Fail on errors
 set -e
 
