@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -e
-set +x
+set -x
 
 # ensure we have the output directory
 mkdir $output
