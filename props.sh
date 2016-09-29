@@ -15,4 +15,3 @@ export output=$WORKSPACE/job
 
 # urls
 export stream_url=https://hvobvxe805.execute-api.us-east-1.amazonaws.com
-export read_url=https://psb8omemk3.execute-api.us-east-1.amazonaws.com
