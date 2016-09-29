@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
+set -e
+
 # ensure we have the output directory
-mkdir $JOB_OUTPUT
+mkdir $output
 
 function get_now(){
   # OSX doesn't have date %N, so we just say the milliseconds are 0
@@ -15,7 +17,7 @@ function read_api(){
 
   read_start=`get_now`
 
-  ${e2e_tools}bin/sql-runner --jar $client_jdbc_jar \
+  ${e2e_tools}/bin/sql-runner --jar $client_jdbc_jar \
     --url $read_url --api-key ${API_KEY} --credentials ${CREDENTIALS} \
     --sql-file $request \
     --out $file \
@@ -34,16 +36,16 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
  --type metric --field field.1 --field timestamp.${now}
 
 # first read is slow - kinesis takes a little while to be 'primed'
-cat ${queries}/select-star-from-table.txt | sed 's/\${table}/metric/g' > $job/query1.txt
-read_api $job/query1.txt $JOB_OUTPUT/stream-batch.read 10 90
+cat ${queries}/select-star-from-table.txt | sed 's/\${table}/metric/g' > $output/query1.txt
+read_api $output/query1.txt $output/stream-batch.read 10 90
 
 # validate the read
-echo "[{ \"timestamp\" : ${now}, \"field\" : \"1\" }]" > $JOB_OUTPUT/stream-batch.expected
-${e2e_tools}/bin/assert_json_matches $JOB_OUTPUT/stream-batch.read $JOB_OUTPUT/stream-batch.expected
+echo "[{ \"timestamp\" : ${now}, \"field\" : \"1\" }]" > $output/stream-batch.expected
+${e2e_tools}/bin/assert_json_matches $output/stream-batch.read $output/stream-batch.expected
 
 # just a regular read, w/o a write, just for simple e2e read timing
-read_api $job/query1.txt $JOB_OUTPUT/stream.read 5 30
-${e2e_tools}/bin/assert_json_matches $JOB_OUTPUT/stream.read $JOB_OUTPUT/stream-batch.expected
+read_api $output/query1.txt $output/stream.read 5 30
+${e2e_tools}/bin/assert_json_matches $output/stream.read $output/stream-batch.expected
 
 echo "--- /stream/events PASS --"
 
@@ -59,11 +61,11 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
 
 # second read should go much faster as kinesis is now 'primed'
 cat ${queries}/select-star-from-table-where-timestamp-greater-than.txt | \
-  sed 's/${table}/metric/g;s/${timestamp}/'"${now}"'/g' > $job/query2.txt
-read_api  $job/query2.txt $JOB_OUTPUT/stream-seq.read 10 30
+  sed 's/${table}/metric/g;s/${timestamp}/'"${now}"'/g' > $output/query2.txt
+read_api  $output/query2.txt $output/stream-seq.read 10 30
 
 # validate the read is only the second entry
-echo "[{ \"timestamp\" : ${new_now}, \"field\" : \"2\" }]" > $JOB_OUTPUT/stream-seq.expected
-${e2e_tools}/bin/assert_json_matches $JOB_OUTPUT/stream-seq.read $JOB_OUTPUT/stream-seq.expected
+echo "[{ \"timestamp\" : ${new_now}, \"field\" : \"2\" }]" > $output/stream-seq.expected
+${e2e_tools}/bin/assert_json_matches $output/stream-seq.read $output/stream-seq.expected
 
 echo "--- /stream/event PASS --"
