@@ -19,7 +19,7 @@ function read_api(){
   read_start=`get_now`
 
   ${e2e_tools}/bin/sql-runner --jar $client_jdbc_jar \
-    --url $read_url --api-key ${API_KEY} --credentials ${CREDENTIALS} \
+    --url $read_url --api-key ${API_KEY} --credentials ${READ_CREDENTIALS} \
     --sql-file $request \
     --out $file \
     --retries $retries \
@@ -33,7 +33,7 @@ now=`get_now`
 
 # Write some data as a 'bunch' of events
 java -cp $client_tools_jar io.fineo.client.tools.Stream \
- --api-key $API_KEY --url $stream_url --credentials-file ${CREDENTIALS} \
+ --api-key $API_KEY --url $stream_url --credentials-file ${WRITE_CREDENTIALS} \
  --type metric --field field.1 --field timestamp.${now}
 
 # first read is slow - kinesis takes a little while to be 'primed'
@@ -56,7 +56,7 @@ new_now=`get_now`
 
 # Write more data as an individual event
 java -cp $client_tools_jar io.fineo.client.tools.Stream \
- --api-key $key --url $stream_url --credentials-file $CREDENTIALS \
+ --api-key $key --url $stream_url --credentials-file ${WRITE_CREDENTIALS} \
  --type metric --field field.2 --field timestamp.${new_now} \
  --seq # write event as a 'sequential' event
 
