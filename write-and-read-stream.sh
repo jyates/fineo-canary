@@ -30,7 +30,7 @@ function read_api(){
 }
 
 now=`get_now`
-
+echo "Running.."
 # Write some data as a 'bunch' of events
 java -cp $client_tools_jar io.fineo.client.tools.Stream \
  --api-key $API_KEY --url $stream_url --credentials-file ${CREDENTIALS} \
