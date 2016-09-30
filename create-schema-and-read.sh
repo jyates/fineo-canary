@@ -16,6 +16,7 @@ if [ "${CREATE_SCHEMA}" = "true" ]; then
   write_latency $now $output/${stats_prefix}create-schema.latency
 fi
 
+set -e
 # read the schema
 now=`get_now`
 java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
