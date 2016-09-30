@@ -28,7 +28,7 @@ write_latency $now $output/${stats_prefix}read-schema.latency
 
 # validate that the schema we read is the same as the schema we created
 schema=`cat $output/read.schema`
-expected="{\"name\":\"metric\",\"aliases\":[],\"timestampPatterns\":[],\"fields\":[{\"name\":\"field\",\"aliases\":[],\"type\":\"STRING\"},{\"name\":\"timestamp\",\"aliases\":[],\"type\":\"LONG\"}]}"
+expected="{\"name\":\"metric\",\"aliases\":[],\"fields\":[{\"name\":\"field\",\"aliases\":[],\"type\":\"STRING\"},{\"name\":\"timestamp\",\"aliases\":[],\"type\":\"LONG\"}],\"timestampPatterns\":[]}"
 
 if [ "$schema" != "$expected" ]; then
   echo "Mismatch in schema and expected schema!"
