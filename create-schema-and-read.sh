@@ -30,8 +30,10 @@ expected="{\"name\":\"metric\",\"aliases\":[],\"timestampPatterns\":[],\"fields\
 
 if [ "$schema" != "$expected" ]; then
   echo "Mismatch in schema and expected schema!"
-  echo "Expected schema:\n\t$expected"
-  echo "Actual schema:\n\t$schema"
+  echo "Expected schema:"
+  echo "   $expected"
+  echo "Actual schema:"
+  echo "   $schema"
 
   # error!
   exit 1
