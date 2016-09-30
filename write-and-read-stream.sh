@@ -5,10 +5,8 @@ set -x
 # ensure we have the output directory
 mkdir $output
 
-function get_now(){
-  # OSX doesn't have date %N, so we just say the milliseconds are 0
-  echo "`date +%s | cut -b1-13`000"
-}
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source $DIR/functions.sh
 
 function read_api(){
   request=$1
@@ -25,8 +23,7 @@ function read_api(){
     --retries $retries \
     --wait-time $wait_time
 
-  read_end=`get_now`
-  echo `expr $read_end - $read_start` > ${file}.latency
+  write_latency ${read_start} ${file}.latency
 }
 
 now=`get_now`
