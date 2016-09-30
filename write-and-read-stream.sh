@@ -3,7 +3,9 @@ set -e
 set -x
 
 # ensure we have the output directory
-mkdir $output
+if [ ! -d $output ];then
+  mkdir $output
+fi
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/functions.sh

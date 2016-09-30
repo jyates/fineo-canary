@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
+set -x
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/functions.sh
 
-mkdir $output
+# ensure we have the output directory
+if [ ! -d $output ];then
+  mkdir $output
+fi
 
 if [ "${CREATE_SCHEMA}" = "true" ]; then
   now=`get_now`
