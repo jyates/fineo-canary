@@ -13,5 +13,8 @@ export client_jdbc_jar=`ls $client/tools*jdbc.jar`
 export queries=$WORKSPACE/queries
 export output=$WORKSPACE/job
 
-# urls
-export stream_url=https://hvobvxe805.execute-api.us-east-1.amazonaws.com
+# schema properties
+export schema_jar=${client_tools_jar}
+export stats_prefix=canary-
+export SCHEMA_CREDENTIALS=${WRITE_CREDENTIALS}
+export key=${API_KEY}
