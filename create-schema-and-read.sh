@@ -20,7 +20,8 @@ set -e
 # read the schema
 now=`get_now`
 java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
-  --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} --type metric read > $output/read.schema
+  --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} \
+  --metric-name metric read > $output/read.schema
 write_latency $now $output/${stats_prefix}read-schema.latency
 
 # validate that the schema we read is the same as the schema we created
