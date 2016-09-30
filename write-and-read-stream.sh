@@ -43,10 +43,11 @@ now=`get_now`
 java -cp $client_tools_jar io.fineo.client.tools.Stream \
  --api-key $API_KEY --url $stream_url --credentials-file ${WRITE_CREDENTIALS} \
  --type metric --field field.1 --field timestamp.${now}
+ write_latency $now $output/${stats_prefix}stream-batch.write.latency
 
 # first read is slow - kinesis takes a little while to be 'primed'
 reformat ${select_star_greater_than} metric $old_now > $output/query1.txt
-read_api  $output/query1.txt $output/stream-batch.read 10 90
+read_api  $output/query1.txt $output/${stats_prefix}stream-batch.read 10 90
 
 # validate the read
 echo "[{ \"timestamp\" : ${now}, \"field\" : \"1\" }]" > $output/stream-batch.expected
@@ -54,7 +55,7 @@ ${json_matches} $output/stream-batch.read $output/stream-batch.expected
 
 # just a regular read, w/o a write, just for simple e2e read timing
 read_api $output/query1.txt $output/stream.read 5 30
-${json_matches} $output/stream.read $output/stream-batch.expected
+${json_matches} $output/stream.read $output/${stats_prefix}stream-batch.expected
 
 echo "--- /stream/events PASS --"
 
@@ -69,10 +70,11 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
  --api-key $key --url $stream_url --credentials-file ${WRITE_CREDENTIALS} \
  --type metric --field field.2 --field timestamp.${now} \
  --seq # write event as a 'sequential' event
+ write_latency $now $output/${stats_prefix}stream-seq.write.latency
 
 # second read should go much faster as kinesis is now 'primed'
 reformat ${select_star_greater_than} metric $old_now > $output/query2.txt
-read_api  $output/query2.txt $output/stream-seq.read 10 30
+read_api  $output/query2.txt $output/${stats_prefix}stream-seq.read 10 30
 
 # validate the read is only the second entry
 echo "[{ \"timestamp\" : ${now}, \"field\" : \"2\" }]" > $output/stream-seq.expected
