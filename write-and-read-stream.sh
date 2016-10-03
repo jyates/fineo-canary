@@ -55,7 +55,7 @@ ${json_matches} $output/stream-batch.read $output/stream-batch.expected
 
 # just a regular read, w/o a write, just for simple e2e read timing
 read_api $output/query1.txt $output/stream.read 5 30
-${json_matches} $output/stream.read $output/${stats_prefix}stream-batch.expected
+${json_matches} $output/stream.read $output/stream-batch.expected
 
 echo "--- /stream/events PASS --"
 
@@ -78,6 +78,6 @@ read_api  $output/query2.txt $output/${stats_prefix}stream-seq.read 10 30
 
 # validate the read is only the second entry
 echo "[{ \"timestamp\" : ${now}, \"field\" : \"2\" }]" > $output/stream-seq.expected
-${e2e_tools}/bin/assert_json_matches $output/stream-seq.read $output/stream-seq.expected
+${json_matches} $output/stream-seq.read $output/stream-seq.expected
 
 echo "--- /stream/event PASS --"
