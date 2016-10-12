@@ -27,6 +27,13 @@ write_latency $now $output/${stats_prefix}read-schema.latency
 expected="{\"name\":\"metric\",\"aliases\":[],\"fields\":[{\"name\":\"field\",\"aliases\":[],\"type\":\"STRING\"},{\"name\":\"timestamp\",\"aliases\":[],\"type\":\"LONG\"}],\"timestampPatterns\":[]}"
 assert_schema $expected `cat $output/read.schema`
 
+# read the org level schema
+now=`get_now`
+read_schema_mgmt > $output/read-mgmt.schema
+write_latency $now $output/${stats_prefix}read-schema-mgmt.latency
+expected="{\"timestampPatterns\":[],\"metricKeys\":[]}"
+assert_schema $expected `cat $output/read-mgmt.schema`
+
 # check that we can add a field alias and that is correct. Regresion test from api <-> lambda mismatch
 if [ "${ADD_ALIAS_FIELD}" = "true" ]; then
   now=`get_now`

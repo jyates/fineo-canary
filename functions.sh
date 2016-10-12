@@ -31,3 +31,9 @@ function read_schema(){
     --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} \
     read --metric-name metric
 }
+
+function read_schema_mgmt(){
+  java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
+    --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} \
+    read-mgmt
+}
