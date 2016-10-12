@@ -32,7 +32,7 @@ if [ "${ADD_ALIAS_FIELD}" = "true" ]; then
   now=`get_now`
   java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
     --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} \
-    update --metric-name io.fineo.client.tools.EventTypes$Metric \
+    update --metric-name metric \
     --field-alias "timestamp=ts"
   write_latency $now $output/${stats_prefix}update-schema-field-alias.latency
 
