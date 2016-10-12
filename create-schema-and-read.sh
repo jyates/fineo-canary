@@ -28,7 +28,7 @@ expected="{\"name\":\"metric\",\"aliases\":[],\"fields\":[{\"name\":\"field\",\"
 assert_schema $expected `cat $output/read.schema`
 
 # check that we can add a field alias and that is correct. Regresion test from api <-> lambda mismatch
-if [ "${ADD_ALIAS_FIELD}" = "true"]; then
+if [ "${ADD_ALIAS_FIELD}" = "true" ]; then
   now=`get_now`
   java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
     --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} \
