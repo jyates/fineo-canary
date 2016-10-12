@@ -12,3 +12,22 @@ function write_latency(){
   file=$2
   echo `expr $task_end - $start` > $file
 }
+
+function assert_schema(){
+  if [ "${1}" != "${2}" ]; then
+    echo "Mismatch in schema and expected schema!"
+    echo "Expected schema:"
+    echo "   ${1}"
+    echo "Actual schema:"
+    echo "   ${2}"
+
+    # error!
+    exit 1
+  fi
+}
+
+function read_schema(){
+  java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
+    --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} \
+    read --metric-name metric
+}
