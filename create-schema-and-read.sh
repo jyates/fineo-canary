@@ -14,7 +14,24 @@ fi
 if [ "${CREATE_SCHEMA}" = "true" ]; then
   now=`get_now`
   java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
-    --url $schema_url --credentials-file ${SCHEMA_CREDENTIALS} create --type metric
+    --url $schema_url \
+    ${SCHEMA_CREDENTIALS_PARAM} \
+    create --type metric
+  write_latency $now $output/${stats_prefix}create-schema.latency
+fi
+
+if [ "${CREATE_STATS_SCHEMA}" = "true" ]; then
+  now=`get_now`
+  java -cp ${schema_jar} io.fineo.client.tools.Schema \
+    --api-key $key \
+    --url $schema_url \
+    ${SCHEMA_CREDENTIALS_PARAM} \
+    create \
+    --metric-name server_stats
+    --Fcpu=INTEGER \
+    --Fmemory_used=INTEGER \
+    --Fmemory_free.INTEGER \
+    --Fmemory_free_percent.DOUBLE
   write_latency $now $output/${stats_prefix}create-schema.latency
 fi
 

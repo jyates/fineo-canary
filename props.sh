@@ -5,6 +5,15 @@ if [ "$#" -gt 0 ]; then
     source $1/.rvmrc
 fi
 
+# $1 = the credentials parameter to check
+function get_credentials(){
+  if [ "x" != "x${1}"]; then
+    echo "--credentials-file ${1}"
+    return
+  fi
+
+}
+
 export e2e_tools=$WORKSPACE/tools
 export client=$WORKSPACE/client
 # ls here apparently gives the whole directory path, when run on jenkins....
@@ -21,3 +30,9 @@ export schema_jar=${client_tools_jar}
 export stats_prefix=canary-
 export SCHEMA_CREDENTIALS=${WRITE_CREDENTIALS}
 export key=${API_KEY}
+
+
+# sort out how credentials work
+export WRITE_CREDENTIALS_PARAM=`get_credentials ${WRITE_CREDENTIALS}`
+export READ_CREDENTIALS_PARAM=`get_credentials ${READ_CREDENTIALS}`
+export SCHEMA_CREDENTIALS_PARAM=`get_credentials ${SCHEMA_CREDENTIALS}`
