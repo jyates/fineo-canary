@@ -28,7 +28,7 @@ if [ "${CREATE_STATS_SCHEMA}" = "true" ]; then
     ${SCHEMA_CREDENTIALS_PARAM} \
     create \
     --metric-name server_stats \
-    -Fcpu=INTEGER \
+    -Fcpu=DOUBLE \
     -Fmemory_used=INTEGER \
     -Fmemory_free=INTEGER \
     -Fmemory_free_percent=DOUBLE
