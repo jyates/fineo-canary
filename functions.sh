@@ -62,5 +62,5 @@ function memory_usage(){
 # $4 - free memory
 # $5 - free memory percent
 function get_write_json(){
-  echo "[{ \"timestamp\" : ${1}, \"cpu\" : \"${2}\", \"memory_used\" : \"${3}\", \"memory_free\" : \"${4}\", \"memory_free_percent\" : \"${5}\" }]"
+  echo "[{ \"timestamp\" : ${1}, \"cpu\" : ${2}, \"memory_used\" : ${3}, \"memory_free\" : ${4}, \"memory_free_percent\" : ${5} }]"
 }
