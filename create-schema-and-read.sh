@@ -27,12 +27,12 @@ if [ "${CREATE_STATS_SCHEMA}" = "true" ]; then
     --url $schema_url \
     ${SCHEMA_CREDENTIALS_PARAM} \
     create \
-    --metric-name server_stats
+    --metric-name server_stats \
     -Fcpu=INTEGER \
     -Fmemory_used=INTEGER \
-    -Fmemory_free.INTEGER \
-    -Fmemory_free_percent.DOUBLE
-  write_latency $now $output/${stats_prefix}create-schema.latency
+    -Fmemory_free=INTEGER \
+    -Fmemory_free_percent=DOUBLE
+  write_latency $now $output/${stats_prefix}create-stats-schema.latency
 fi
 
 # read the schema
