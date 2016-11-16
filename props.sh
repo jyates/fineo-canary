@@ -7,11 +7,11 @@ fi
 
 # $1 = the credentials parameter to check
 function get_credentials(){
-  if [ "x" != "x${1}"]; then
+  if [ "x" != "x${1}" ]; then
     echo "--credentials-file ${1}"
-    return
+  else
+    echo "--static-key ${AWS_ACCESS_KEY_ID} --static-secret ${AWS_SECRET_ACCESS_KEY}"
   fi
-
 }
 
 export e2e_tools=$WORKSPACE/tools
