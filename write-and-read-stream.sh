@@ -14,7 +14,7 @@ function reformat(){
   file=$1
   table=$2
   greater_than=$3
-  cat ${file} | sed 's/${table}/metric/g;s/${timestamp}/'"${greater_than}"'/g'
+  cat ${file} | sed 's/${table}/'"${table}"'/g;s/${timestamp}/'"${greater_than}"'/g'
 }
 
 function read_api(){
