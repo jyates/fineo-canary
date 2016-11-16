@@ -28,10 +28,10 @@ if [ "${CREATE_STATS_SCHEMA}" = "true" ]; then
     ${SCHEMA_CREDENTIALS_PARAM} \
     create \
     --metric-name server_stats
-    --Fcpu=INTEGER \
-    --Fmemory_used=INTEGER \
-    --Fmemory_free.INTEGER \
-    --Fmemory_free_percent.DOUBLE
+    -Fcpu=INTEGER \
+    -Fmemory_used=INTEGER \
+    -Fmemory_free.INTEGER \
+    -Fmemory_free_percent.DOUBLE
   write_latency $now $output/${stats_prefix}create-schema.latency
 fi
 
