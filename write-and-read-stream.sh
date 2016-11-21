@@ -41,6 +41,12 @@ old_now=`get_now`
 sleep 1
 now=`get_now`
 
+# do a simple read of the catalog - regression catch for validating schema reads
+catalog_query=$output/catalog_query.sql
+echo "SELECT '' AS \`Interim zero-row result set\` FROM INFORMATION_SCHEMA.CATALOGS LIMIT 0" > $catalog_query
+read_api $catalog_query "${output}/catalog.read" 1 10
+
+
 # get the actual event data to write
 cpu=`current_cpu`
 memory_usage > $output/current_memory.usage
