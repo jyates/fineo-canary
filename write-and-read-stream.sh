@@ -31,7 +31,8 @@ function read_api(){
     --sql-file $request \
     --out $file \
     --retries $retries \
-    --wait-time $wait_time
+    --wait-time $wait_time \
+    ${REQUIRE_OUTPUT}
 
   write_latency ${read_start} ${file}.latency
 }
@@ -43,9 +44,10 @@ now=`get_now`
 
 # do a simple read of the catalog - regression catch for validating schema reads
 catalog_query=$output/catalog_query.sql
+REQUIRE_OUTPUT="--no-output-required"
 echo "SELECT '' AS \`Interim zero-row result set\` FROM INFORMATION_SCHEMA.CATALOGS LIMIT 0" > $catalog_query
 read_api $catalog_query "${output}/catalog.read" 1 10
-
+unset REQUIRE_OUTPUT
 
 # get the actual event data to write
 cpu=`current_cpu`
