@@ -51,7 +51,11 @@ function current_cpu(){
 # #2 - Free memory
 # #3 - % free memory
 function memory_usage(){
-  free -m | awk 'NR==2{printf "%s\n%s\n%.2f\n", $2,$3,$3*100/$2}'
+  # free -m output is:
+  #             total       used       free     shared    buffers     cached
+  #Mem:          7983       7828        155          0        351       5698
+  # So $1 = Mem, $2 = total, $3 = used, $4 = free
+  free -m | awk 'NR==2{printf "%s\n%s\n%.2f\n", $3,$4,$4*100/$2}'
 }
 
 # $1 - 'now'
