@@ -11,19 +11,18 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/functions.sh
 
 function reformat(){
-  file=$1
-  table=$2
-  greater_than=$3
+  local file=$1
+  local table=$2
+  local greater_than=$3
   cat ${file} | sed 's/${table}/'"${table}"'/g;s/${timestamp}/'"${greater_than}"'/g'
 }
 
 function read_api(){
-  request=$1
-  file=$2
-  retries=$3
-  wait_time=$4
-
-  read_start=`get_now`
+  local request=$1
+  local file=$2
+  local retries=$3
+  local wait_time=$4
+  local read_start=`get_now`
 
   ${e2e_tools}/bin/sql-runner --jar $client_jdbc_jar \
     --url $read_url --api-key ${API_KEY} \

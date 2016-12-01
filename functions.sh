@@ -6,11 +6,9 @@ function get_now() {
 }
 
 function write_latency(){
-  task_end=`get_now`
-
-  start=$1
-  file=$2
-  echo `expr $task_end - $start` > $file
+  local task_end=`get_now`
+  local start=$1
+  echo `expr $task_end - $start` > $2
 }
 
 function assert_schema(){
@@ -27,7 +25,7 @@ function assert_schema(){
 }
 
 function read_schema(){
-  metric_name=${1:-"metric"}
+  local metric_name=${1:-"metric"}
   java -cp ${schema_jar} io.fineo.client.tools.Schema \
     --api-key $key \
     --url $schema_url \
