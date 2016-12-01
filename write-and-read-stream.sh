@@ -67,7 +67,7 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
  write_latency $now $output/${stats_prefix}stream-batch.write.latency
 
 # first read is slow - kinesis takes a little while to be 'primed'
-reformat ${select_star_greater_than} server_stats $old_now > $output/query1.txt
+reformat ${select_star_greater_than} server_stats ${old_now} > $output/query1.txt
 output_file=$output/${stats_prefix}stream-batch.read
 read_api $output/query1.txt $output_file 10 90
 
@@ -102,7 +102,7 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
  write_latency $now $output/${stats_prefix}stream-seq.write.latency
 
 # second read should go much faster as kinesis is now 'primed'
-reformat ${select_star_greater_than} server_stats $old_now > $output/query2.txt
+reformat ${select_star_greater_than} server_stats ${old_now} > $output/query2.txt
 output_file=$output/${stats_prefix}stream-seq.read
 read_api  $output/query2.txt $output_file 10 30
 
