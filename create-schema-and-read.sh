@@ -18,6 +18,17 @@ if [ "${CREATE_SCHEMA}" = "true" ]; then
     ${SCHEMA_CREDENTIALS_PARAM} \
     create --type metric
   write_latency $now $output/${stats_prefix}create-schema.latency
+
+  java -cp ${schema_jar} io.fineo.client.tools.Schema --api-key $key \
+    --url $schema_url \
+    ${SCHEMA_CREDENTIALS_PARAM} \
+    metrics > $output/list.schemas
+  write_latency $now $output/${stats_prefix}list-schemas.latency
+
+  # validate that we are reading the schemas properly
+  expected="metric,"
+  cat $output/list.schemas | sed 's/{//' | sed 's/}//' | sed 's/\\//g' | sed 's/"//g' | awk 'BEGIN{ RS=",";FS=":";}{ printf "%s,",$2}' | tr -d '\r\n' > $output/list.schemas.simple
+  assert_schema $expected `cat $output/list.schemas.simple`
 fi
 
 if [ "${CREATE_STATS_SCHEMA}" = "true" ]; then
