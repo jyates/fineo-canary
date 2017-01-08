@@ -27,7 +27,14 @@ if [ "${CREATE_SCHEMA}" = "true" ]; then
 
   # validate that we are reading the schemas properly
   expected="metric,"
-  cat $output/list.schemas | sed 's/{//' | sed 's/}//' | sed 's/\\//g' | sed 's/"//g' | awk 'BEGIN{ RS=",";FS=":";}{ printf "%s,",$2}' | tr -d '\r\n' > $output/list.schemas.simple
+  # something of the form {"idToMetricName":{"_ff1729680826":"metric","_ff2222":"antohermetric"}}
+  # 1. replace } globaly
+  # 2. repalce any \ globally
+  # 3. replace any quotes, globally
+  # 4. remove {"idToMetricName":{
+  # 5. split the fields on ":" and records on ","
+  # 6. replace line feed characters which awk is injecting (after the last record)
+  cat $output/list.schemas | sed 's/}//g' | sed 's/\\//g' | sed 's/"//g' | awk 'BEGIN{ FS=":{"}{print $2}' | awk 'BEGIN{RS=","; FS=":";}{printf "'%s',", $2}'|tr -d '\r\n' > $output/list.schemas.simple
   assert_schema $expected `cat $output/list.schemas.simple`
 fi
 
