@@ -48,6 +48,7 @@ function read_api(){
     --sql-file $request \
     --out $file \
     --retries $retries \
+    --verbose \
     --wait-time $wait_time \
     ${REQUIRE_OUTPUT}
 
