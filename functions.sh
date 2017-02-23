@@ -66,3 +66,44 @@ function memory_usage(){
 function get_write_json(){
   echo "[{ \"timestamp\" : ${1}, \"cpu\" : ${2}, \"memory_used\" : ${3}, \"memory_free\" : ${4}, \"memory_free_percent\" : ${5} }]"
 }
+
+
+function get_rvm(){
+  rvm env --path | sed -e 's/\/.*\///'
+}
+
+function use_rvm(){
+  # ensure rvm can be used as a function
+  source "$HOME/.rvm/scripts/rvm"
+  # switch to the specified directory - ensures that we properly load the rvmrc and install necessary gems
+  cd $1
+  local rvm_file=".rvmrc"
+  if [[ -s "$rvm_file" ]]; then
+    source $rvm_file
+    local env_id=`get_rvm`
+    bundle install
+    cd $DIR
+    rvm use $env_id
+  else
+    echo "rvmrc file (${rvm_file}) is missing/empty!"
+    exit 10
+  fi
+}
+
+function use_rvm_if_possible(){
+  local count=$1
+  local dir=$2
+  if [ "$count" -gt 0 ]; then
+    use_rvm $dir
+  fi
+}
+
+function stashrvm(){
+  get_rvm > /tmp/jenkins.canary.stash.rvm
+}
+
+function poprvm(){
+  if [ -f $job/stash.rvm ];then
+    rvm use `cat /tmp/jenkins.canary.stash.rvm`
+  fi
+}
