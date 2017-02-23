@@ -10,8 +10,19 @@ fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/functions.sh
 
+if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+  echo "Write and read a stream of data"
+  echo "$0 [-h|--help] [user] [skip_url]"
+  echo "Arguments:"
+  echo "  user       Enale username/password mode."
+  echo "  skip_url   Skips specifying the URL for requests."
+  echo " -h, --help  Show this help."
+  exit 0;
+fi
+
+
 # if we enable the user mode
-if [ "$#" -eq 1 ] && [ "$1" = "user" ]; then
+if [ "$1" = "user" ] || [ "$2" = "user" ]; then
   if [ "${USERNAME}x" = "x" ] || [ "${PASSWORD}x" = "x" ]; then
     echo "Missing username/password, but user mode enabled!"
     exit 1
@@ -19,6 +30,17 @@ if [ "$#" -eq 1 ] && [ "$1" = "user" ]; then
 
   # overwrite the READ_CREDENTIALS_PARAM to be username/password
   export READ_CREDENTIALS_PARAM="--user ${USERNAME} --password ${PASSWORD}"
+  export WRITE_CREDENTIALS_PARAM="${READ_CREDENTIALS_PARAM}"
+fi
+
+if [ "$1" = "skip_url" ] || [ "$2" = "skip_url" ]; then
+  read_url=""
+  schema_url=""
+  stream_url=""
+else
+  schema_url="--url $schema_url"
+  read_url="--url $read_url"
+  stream_url="--url $stream_url"
 fi
 
 
@@ -36,14 +58,9 @@ function read_api(){
   local wait_time=$4
   local read_start=`get_now`
 
-  # only set the url if its unset. 'advanced' client funcitionality to use standard apis
-  if [ "${read_url}x" != "x" ]; then
-    local real_url_param= "--url $read_url"
-  fi
-
   ${e2e_tools}/bin/sql-runner --jar $client_jdbc_jar \
     --api-key ${API_KEY} \
-    ${real_url_param} \
+    ${read_url} \
     ${READ_CREDENTIALS_PARAM} \
     --sql-file $request \
     --out $file \
@@ -74,7 +91,8 @@ readarray memory < $output/current_memory.usage
 
 # Write some data as a 'bunch' of events
 java -cp $client_tools_jar io.fineo.client.tools.Stream \
-  --api-key $API_KEY --url $stream_url \
+  --api-key $API_KEY \
+  ${stream_url} \
   ${WRITE_CREDENTIALS_PARAM} \
   --metric-name server_stats \
   --field cpu.${cpu} \
@@ -108,7 +126,8 @@ now=`get_now`
 
 # Write more data as an individual event
 java -cp $client_tools_jar io.fineo.client.tools.Stream \
-  --api-key $API_KEY --url $stream_url \
+  --api-key $API_KEY \
+  ${stream_url} \
   ${WRITE_CREDENTIALS_PARAM} \
   --metric-name server_stats \
   --field cpu.${cpu} \

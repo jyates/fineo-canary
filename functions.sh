@@ -28,7 +28,7 @@ function read_schema(){
   local metric_name=${1:-"metric"}
   java -cp ${schema_jar} io.fineo.client.tools.Schema \
     --api-key $key \
-    --url $schema_url \
+    ${schema_url} \
     ${SCHEMA_CREDENTIALS_PARAM} \
     read --metric-name ${metric_name}
 }
@@ -36,7 +36,7 @@ function read_schema(){
 function read_schema_mgmt(){
   java -cp ${schema_jar} io.fineo.client.tools.Schema \
     --api-key $key \
-    --url $schema_url \
+    ${schema_url} \
     ${SCHEMA_CREDENTIALS_PARAM} \
     read-mgmt
 }
