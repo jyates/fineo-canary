@@ -10,6 +10,18 @@ fi
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source $DIR/functions.sh
 
+# if we enable the user mode
+if [ "$#" -eq 1 ] && [ "$1" = "user" ]; then
+  if [ "${USERNAME}x" = "x" ] || [ "${PASSWORD}x" = "x" ]; then
+    echo "Missing username/password, but user mode enabled!"
+    exit 1
+  fi
+
+  # overwrite the READ_CREDENTIALS_PARAM to be username/password
+  export READ_CREDENTIALS_PARAM="--user ${USERNAME} --password ${PASSWORD}"
+fi
+
+
 function reformat(){
   local file=$1
   local table=$2
@@ -24,8 +36,14 @@ function read_api(){
   local wait_time=$4
   local read_start=`get_now`
 
+  # only set the url if its unset. 'advanced' client funcitionality to use standard apis
+  if [ "${read_url}x" != "x" ]; then
+    local real_url_param= "--url $read_url"
+  fi
+
   ${e2e_tools}/bin/sql-runner --jar $client_jdbc_jar \
-    --url $read_url --api-key ${API_KEY} \
+    --api-key ${API_KEY} \
+    ${real_url_param} \
     ${READ_CREDENTIALS_PARAM} \
     --sql-file $request \
     --out $file \
