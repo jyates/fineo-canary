@@ -29,7 +29,7 @@ if [ "$1" = "user" ] || [ "$2" = "user" ]; then
   fi
 
   # overwrite the READ_CREDENTIALS_PARAM to be username/password
-  export READ_CREDENTIALS_PARAM="--user ${USERNAME} --password ${PASSWORD}"
+  export READ_CREDENTIALS_PARAM="--username ${USERNAME} --password ${PASSWORD}"
   export WRITE_CREDENTIALS_PARAM="${READ_CREDENTIALS_PARAM}"
 fi
 

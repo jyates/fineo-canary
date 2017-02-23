@@ -29,7 +29,7 @@ if [ "$1" = "user" ] || [ "$2" = "user" ]; then
   fi
 
   # overwrite the SCHEMA_CREDENTIALS_PARAM to be username/password
-  export SCHEMA_CREDENTIALS_PARAM="--user ${USERNAME} --password ${PASSWORD}"
+  export SCHEMA_CREDENTIALS_PARAM="--username ${USERNAME} --password ${PASSWORD}"
 fi
 
 if [ "$1" = "skip_url" ] || [ "$2" = "skip_url" ]; then
