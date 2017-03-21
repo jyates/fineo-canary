@@ -44,34 +44,6 @@ else
 fi
 
 
-function reformat(){
-  local file=$1
-  local table=$2
-  local greater_than=$3
-  cat ${file} | sed 's/${table}/'"${table}"'/g;s/${timestamp}/'"${greater_than}"'/g'
-}
-
-function read_api(){
-  local request=$1
-  local file=$2
-  local retries=$3
-  local wait_time=$4
-  local read_start=`get_now`
-
-  ${e2e_tools}/bin/sql-runner --jar $client_jdbc_jar \
-    --api-key ${API_KEY} \
-    ${read_url} \
-    ${READ_CREDENTIALS_PARAM} \
-    --sql-file $request \
-    --out $file \
-    --retries $retries \
-    --verbose \
-    --wait-time $wait_time \
-    ${REQUIRE_OUTPUT}
-
-  write_latency ${read_start} ${file}.latency
-}
-
 # wait a tick so we have a previous timestamp at which  we are sure no data has been written
 old_now=`get_now`
 sleep 1
