@@ -48,17 +48,11 @@ old_now=`get_now`
 sleep 1
 now=`get_now`
 
-# write a 'bad' row of data
-cpu=`current_cpu`
-memory_usage > $output/current_memory.usage
-readarray memory < $output/current_memory.usage
-
-# Write some data as a 'bunch' of events
+# Write some 'bad' data - not a valid metric name
 java -cp $client_tools_jar io.fineo.client.tools.Stream \
   --api-key $API_KEY \
   ${stream_url} \
   ${WRITE_CREDENTIALS_PARAM} \
-  # oops, missing a bad metric name
   --metric-name "server_stats-does-not-exist-for-testing" \
   --field cpu.10 \
   --field timestamp.${now}
@@ -68,7 +62,8 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
 sleep 60
 
 # first read is slow - kinesis takes a little while to be 'primed'
-reformat ${select_star_greater_than} "error.stream" ${old_now} > $output/errorRead.txt
+# e.g. SELECT * FROM error.stream WHERE `timestamp` > 1490148381000
+reformat ${select_star_greater_than} "errors.stream" ${old_now} > $output/errorRead.txt
 output_file=$output/${stats_prefix}error.read
 read_api $output/errorRead.txt $output_file 10 90
 
