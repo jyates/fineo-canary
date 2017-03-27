@@ -22,6 +22,7 @@ export client_jdbc_jar=`ls $client/tools*jdbc.jar`
 export queries=$WORKSPACE/queries
 export output=$WORKSPACE/job
 
+export select_star=${queries}/select-star-from-table.txt
 export select_star_greater_than=${queries}/select-star-from-table-where-timestamp-greater-than.txt
 export json_matches=${e2e_tools}/bin/assert_json_matches
 

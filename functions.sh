@@ -112,7 +112,9 @@ function reformat(){
   local file=$1
   local table=$2
   local greater_than=$3
-  cat ${file} | sed 's/${table}/'"${table}"'/g;s/${timestamp}/'"${greater_than}"'/g'
+  local ts_name=${4:-"timestamp"}
+
+  cat ${file} | sed 's/${table}/'"${table}"'/g;s/${timestamp}/'"${greater_than}"'/g;s/${timestamp_name}/'"${ts_name}"'/g'
 }
 
 function read_api(){

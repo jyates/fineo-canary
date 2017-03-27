@@ -1,1 +1,1 @@
-SELECT * FROM ${table} WHERE `timestamp` > ${timestamp}
+SELECT * FROM ${table} WHERE `${timestamp_name}` > ${timestamp}

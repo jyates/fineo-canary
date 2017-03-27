@@ -62,10 +62,15 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
 sleep 60
 
 # first read is slow - kinesis takes a little while to be 'primed'
-# e.g. SELECT * FROM error.stream WHERE `timestamp` > 1490148381000
-reformat ${select_star_greater_than} "errors.stream" ${old_now} > $output/errorRead.txt
-output_file=$output/${stats_prefix}error.read
-read_api $output/errorRead.txt $output_file 10 90
+# e.g. SELECT * FROM error.stream WHERE `handled_timestamp` > 1490148381000
+reformat ${select_star} "errors.stream" > $output/errorReadStar.txt
+output_file=$output/${stats_prefix}error-star.read
+read_api $output/errorReadStar.txt $output_file 10 90
+
+# e.g. SELECT * FROM error.stream WHERE `handled_timestamp` > 1490148381000
+reformat ${select_star_greater_than} "errors.stream" ${old_now} "handled_timestamp"> $output/errorReadTs.txt
+output_file=$output/${stats_prefix}error-gt.read
+read_api $output/errorReadTs.txt $output_file 10 90
 
 echo "--- Get Errors PASS --"
 exit 0;
