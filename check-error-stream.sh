@@ -61,8 +61,8 @@ java -cp $client_tools_jar io.fineo.client.tools.Stream \
 # Wait the minimum amount of time - 60s - for the stream to be flushed
 sleep 60
 
-# first read is slow - kinesis takes a little while to be 'primed'
-# e.g. SELECT * FROM error.stream WHERE `handled_timestamp` > 1490148381000
+# Read the error records
+# e.g. SELECT * FROM error.stream;
 reformat ${select_star} "errors.stream" > $output/errorReadStar.txt
 output_file=$output/${stats_prefix}error-star.read
 read_api $output/errorReadStar.txt $output_file 10 90
