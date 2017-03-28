@@ -137,3 +137,10 @@ function read_api(){
 
   write_latency ${read_start} ${file}.latency
 }
+
+# Create a SQL query WHERE param for a field and a value
+# $1 - field name
+# $2 - value
+function field_less_than_equals(){
+  echo "\`${1}\` <= ${2}"
+}

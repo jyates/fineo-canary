@@ -43,7 +43,7 @@ else
   stream_url="--url $stream_url"
 fi
 
-# wait a tick so we have a previous timestamp at which  we are sure no data has been written
+# wait a tick so we have a previous timestamp at which we are sure no data has been written
 old_now=`get_now`
 sleep 1
 now=`get_now`
@@ -63,14 +63,32 @@ sleep 60
 
 # Read the error records
 # e.g. SELECT * FROM error.stream;
-reformat ${select_star} "errors.stream" > $output/errorReadStar.txt
-output_file=$output/${stats_prefix}error-star.read
-read_api $output/errorReadStar.txt $output_file 10 90
+if [ "${READ_ALL_ERRORS}" = "true" ]; then
+  # only in testing do we want to read all the errors. Otherwise, its quite painful
+  reformat ${select_star} "errors.stream" > $output/errorReadStar.txt
+  output_file=$output/${stats_prefix}error-star.read
+  read_api $output/errorReadStar.txt $output_file 10 90
+fi
 
 # e.g. SELECT * FROM error.stream WHERE `handled_timestamp` > 1490148381000
 reformat ${select_star_greater_than} "errors.stream" ${old_now} "handled_timestamp"> $output/errorReadTs.txt
 output_file=$output/${stats_prefix}error-gt.read
 read_api $output/errorReadTs.txt $output_file 10 90
+
+# e.g. SELECT * FROM error.stream WHERE `handled_timestamp` > 1490148381000 AND `year` <= 2017 AND `month` <= 5 AND `day` <= 10 AND `hour` <= 10
+parts=`date +"%Y %m %d %H"`
+yr=`echo $parts | awk '{print $1}'`
+month=`echo $parts | awk '{print $2}'`
+day=`echo $parts | awk '{print $3}'`
+hour=`echo $parts | awk '{print $4}'`
+yrField=`field_less_than_equals year $yr`
+monthField=`field_less_than_equals month $month`
+dayField=`field_less_than_equals day $day`
+hourField=`field_less_than_equals hour $hour`
+cp $output/errorReadTs.txt $output/errorReadTsWithClauses.txt
+echo " AND $yrField AND $monthField AND $dayField AND $hourField" >> $output/errorReadTsWithClauses.txt
+output_file=$output/${stats_prefix}error-gt-clauses.read
+read_api $output/errorReadTsWithClauses.txt $output_file 10 90
 
 echo "--- Get Errors PASS --"
 exit 0;
