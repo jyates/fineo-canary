@@ -28,7 +28,7 @@ export json_matches=${e2e_tools}/bin/assert_json_matches
 
 # schema properties
 export schema_jar=${client_tools_jar}
-export stats_prefix=canary-
+export stats_prefix="${stats_prefix}canary-"
 export SCHEMA_CREDENTIALS=${WRITE_CREDENTIALS}
 export key=${API_KEY}
 
